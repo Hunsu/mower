@@ -1,5 +1,6 @@
-import { parseCommands} from "./parser";
+import {parseCommands, parseCoordinates, parseCoordinatesWithDirection} from "./parser";
 
 export {
-    parseCommands
+    parseCommands,
+    parseCoordinates, parseCoordinatesWithDirection
 }

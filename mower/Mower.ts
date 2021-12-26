@@ -15,7 +15,7 @@ export class Mower {
     private readonly _positionWithOrientation: PositionWithOrientation;
     private readonly _id: string;
 
-    constructor(id, positionWithOrientation: PositionWithOrientation) {
+    constructor(id: string, positionWithOrientation: PositionWithOrientation) {
         this._id = id
         this._positionWithOrientation = positionWithOrientation;
     }
@@ -121,8 +121,9 @@ export class Mower {
         }
     }
 
-    public processCommands(commands: Array<ControlCommand>) {
-        eventEmitter.emitStartProcessingEvent(this._id,
+    public processCommands(commands: Array<ControlCommand>): Promise<void> {
+        return new Promise(() => {
+            eventEmitter.emitStartProcessingEvent(this._id,
             new PositionWithOrientation(
                 new Position(
                     this._positionWithOrientation.position.x,
@@ -130,7 +131,8 @@ export class Mower {
                 ),
                 this._positionWithOrientation.direction)
         )
-        commands.forEach(command => this.processCommand(command))
-        eventEmitter.emitEndProcessingEvent(this._id)
+            commands.forEach(command => this.processCommand(command))
+            eventEmitter.emitEndProcessingEvent(this._id)
+        })
     }
 }

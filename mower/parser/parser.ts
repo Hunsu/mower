@@ -1,7 +1,11 @@
 import {ControlCommand} from "../Mower";
+import {Direction, Position, PositionWithOrientation} from "../position";
 
 export const parseCommands =
     (commands: string): Array<ControlCommand> => {
+        if (commands === null || commands === undefined) {
+            throw new Error(`Incorrect value was provided: ${commands}`)
+        }
         const controlCommands = []
         for (let i = 0; i < commands.length; i++) {
             switch (commands.charAt(i)) {
@@ -20,3 +24,55 @@ export const parseCommands =
         }
         return controlCommands
     }
+
+const isNumber = (value: string): boolean => {
+    return ((value != null) &&
+        (value !== '') &&
+        !isNaN(Number(value.toString())));
+}
+
+export const parseCoordinates = (line: string): Position => {
+    if (!line) {
+        throw new Error(`Incorrect value was provided: ${line}`)
+    }
+    const coordinates = line.split(" ")
+    if (coordinates.length !== 2) {
+        throw new Error(`Incorrect value was provided: ${line}`)
+    }
+    if (!isNumber(coordinates[0]) || !isNumber(coordinates[1])) {
+        throw new Error(`Incorrect value was provided: ${line}`)
+    }
+    return new Position(Number(coordinates[0]), Number(coordinates[1]))
+}
+
+const parseOrientation = (value: string): Direction => {
+    switch (value) {
+        case 'N':
+            return Direction.N
+        case 'E':
+            return Direction.E
+        case 'S':
+            return Direction.S
+        case 'W':
+            return Direction.W
+        default:
+            throw new Error(`Incorrect value was provided: ${value}`)
+    }
+}
+
+export const parseCoordinatesWithDirection = (value: string): PositionWithOrientation => {
+    if (!value) {
+        throw new Error(`Incorrect value was provided: ${value}`)
+    }
+    const values = value.split(" ")
+    if (values.length !== 3) {
+        throw new Error(`Incorrect value was provided: ${value}`)
+    }
+    try {
+        const position = parseCoordinates(`${values[0]} ${values[1]}`)
+        const direction = parseOrientation(values[2])
+        return new PositionWithOrientation(position, direction)
+    } catch (e) {
+        throw new Error(`Incorrect value was provided: ${value}`)
+    }
+}
