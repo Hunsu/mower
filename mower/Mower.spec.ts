@@ -3,6 +3,7 @@ import {Direction, PositionWithOrientation} from "./position";
 import {Position} from "./Position";
 import {Surface} from "./Surface";
 import {parseCommands} from "./parser";
+import eventEmitter from "./events/event-emitter";
 
 describe('Mower processing commands', () => {
     let mower: Mower;
@@ -102,3 +103,37 @@ describe('Mower processing commands', () => {
         expect(mower.positionWithOrientation.direction).toBe(direction)
     })
 })
+
+describe('Mower emitting events', () => {
+    let mower;
+    beforeEach(() => {
+        jest.spyOn(eventEmitter, 'emitStartProcessingEvent')
+        jest.spyOn(eventEmitter, 'emitCommandEvent')
+        jest.spyOn(eventEmitter, 'emitMoveEvent')
+        jest.spyOn(eventEmitter, 'emitRotateEvent')
+        jest.spyOn(eventEmitter, 'emitEndProcessingEvent')
+        mower = new Mower('1', new PositionWithOrientation(new Position(0,0), Direction.N))
+        mower.setSurfaceToMow(new Surface(new Position(0,0), new Position(5,5)))
+    })
+
+    it('should emit start processing event', () => {
+        mower.processCommands([ControlCommand.L])
+        expect(eventEmitter.emitStartProcessingEvent).toHaveBeenCalled()
+    });
+    it('should emit command event', () => {
+        mower.processCommands([ControlCommand.L])
+        expect(eventEmitter.emitCommandEvent).toHaveBeenCalled()
+    });
+    it('should emit rotate event', () => {
+        mower.processCommands([ControlCommand.L])
+        expect(eventEmitter.emitRotateEvent).toHaveBeenCalled()
+    });
+    it('should emit move event', () => {
+        mower.processCommands([ControlCommand.F])
+        expect(eventEmitter.emitMoveEvent).toHaveBeenCalled()
+    });
+    it('should emit end processing event', () => {
+        mower.processCommands([ControlCommand.L])
+        expect(eventEmitter.emitEndProcessingEvent).toHaveBeenCalled()
+    });
+});

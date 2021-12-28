@@ -2,6 +2,8 @@ import {Surface} from "./Surface";
 import {Direction, PositionWithOrientation} from "./position";
 import {Position} from "./Position";
 
+import eventEmitter from "./events/event-emitter";
+
 export enum ControlCommand {
     R, L, F
 }
@@ -30,11 +32,13 @@ export class Mower {
     }
 
     changeOrientation(command: DirectionCommand) {
+        const previousDirection = this._positionWithOrientation.direction;
         if (command === ControlCommand.R) {
             this.rotateRight();
         } else {
             this.rotateLeft();
         }
+        eventEmitter.emitRotateEvent(this._id, previousDirection, this._positionWithOrientation.direction)
     }
 
     private rotateLeft() {
@@ -93,13 +97,20 @@ export class Mower {
         }
         const canMoveForward = this._surfaceToMaw.isInside(nextPosition)
         if (canMoveForward) {
-            this.positionWithOrientation.position = nextPosition;
+            const previousPosition = new Position(
+                this.positionWithOrientation.position.x,
+                this.positionWithOrientation.position.y,
+            );
+            this.positionWithOrientation.position = new Position(
+                nextPosition.x, nextPosition.y);
+            eventEmitter.emitMoveEvent(this._id, previousPosition, nextPosition)
         } else {
             console.log("Can't move outside surface to mow")
         }
     }
 
     public processCommand(command: ControlCommand) {
+        eventEmitter.emitCommandEvent(this._id, command)
         switch (command) {
             case ControlCommand.R:
             case ControlCommand.L:
@@ -111,6 +122,15 @@ export class Mower {
     }
 
     public processCommands(commands: Array<ControlCommand>) {
+        eventEmitter.emitStartProcessingEvent(this._id,
+            new PositionWithOrientation(
+                new Position(
+                    this._positionWithOrientation.position.x,
+                    this._positionWithOrientation.position.y
+                ),
+                this._positionWithOrientation.direction)
+        )
         commands.forEach(command => this.processCommand(command))
+        eventEmitter.emitEndProcessingEvent(this._id)
     }
 }
