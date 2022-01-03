@@ -5,7 +5,7 @@ import {tmpdir} from 'os';
 import Path from 'path';
 import fs from "fs";
 import eventEmitter from "../events/event-emitter";
-import {Direction, Position, PositionWithOrientation} from "../position";
+import {Direction, Position, PositionWithOrientation} from "../lawn";
 
 const tmpFile = (): string => {
     return Path.join
