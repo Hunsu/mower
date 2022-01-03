@@ -1,9 +1,7 @@
 import {ControlCommand, Mower} from "./Mower";
-import {Direction, PositionWithOrientation} from "./position";
-import {Position} from "./Position";
-import {Surface} from "./Surface";
-import {parseCommands} from "./parser";
-import eventEmitter from "./events/event-emitter";
+import {Direction, PositionWithOrientation, Position, Surface} from "../lawn";
+import {parseCommands} from "../parser";
+import eventEmitter from "../events/event-emitter";
 
 describe('Mower processing commands', () => {
     let mower: Mower;

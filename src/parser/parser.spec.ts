@@ -1,6 +1,6 @@
 import {parseCommands, parseCoordinates, parseCoordinatesWithDirection} from "./parser";
-import {ControlCommand} from "../Mower";
-import {Direction, Position, PositionWithOrientation} from "../position";
+import {ControlCommand} from "../mower/Mower";
+import {Direction, Position, PositionWithOrientation} from "../lawn";
 
 describe('parseCommands', () => {
     it('should throw error if value is null', () => {

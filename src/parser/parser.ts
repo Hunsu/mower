@@ -1,5 +1,5 @@
-import {ControlCommand} from "../Mower";
-import {Direction, Position, PositionWithOrientation} from "../position";
+import {ControlCommand} from "../mower/Mower";
+import {Direction, Position, PositionWithOrientation} from "../lawn";
 
 export const parseCommands =
     (commands: string): Array<ControlCommand> => {

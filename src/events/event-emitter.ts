@@ -1,7 +1,7 @@
 import EventEmitter from "events";
-import {ControlCommand} from "../Mower";
-import {Direction, PositionWithOrientation} from "../position";
-import {Position} from "../position";
+import {ControlCommand} from "../mower/Mower";
+import {Direction, PositionWithOrientation} from "../Position";
+import {Position} from "../Position";
 
 type CommandListener = (id: string, command: ControlCommand) => void
 type RotateListener = (id: string, previousDirection: Direction, nextDirection: Direction) => void

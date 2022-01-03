@@ -1,8 +1,7 @@
-import {Surface} from "./Surface";
-import {Direction, PositionWithOrientation} from "./position";
-import {Position} from "./Position";
+import {Surface} from "../lawn/Surface";
+import {Direction, PositionWithOrientation, Position} from "../lawn";
 
-import eventEmitter from "./events/event-emitter";
+import eventEmitter from "../events/event-emitter";
 
 export enum ControlCommand {
     R, L, F
@@ -105,7 +104,7 @@ export class Mower {
                 nextPosition.x, nextPosition.y);
             eventEmitter.emitMoveEvent(this._id, previousPosition, nextPosition)
         } else {
-            console.log("Can't move outside surface to mow")
+            console.log(`Can't move outside surface to mow (${nextPosition.x}, ${nextPosition.y})`)
         }
     }
 

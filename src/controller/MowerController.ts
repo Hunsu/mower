@@ -1,9 +1,9 @@
 import fs from 'fs'
 import es from 'event-stream'
-import {Surface} from "../Surface";
-import {Position} from "../position";
+import {Surface} from "../lawn/Surface";
+import {Position} from "../lawn";
 import {parseCommands, parseCoordinates, parseCoordinatesWithDirection} from "../parser";
-import {Mower} from "../Mower";
+import {Mower} from "../mower/Mower";
 
 const createMowerFromLine = (id, line) => {
     return new Mower(id, parseCoordinatesWithDirection(line))
