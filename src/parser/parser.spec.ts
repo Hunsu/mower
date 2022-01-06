@@ -20,10 +20,10 @@ describe('parseCommands', () => {
     })
     it('should correctly parse correct commands', () => {
         expect(parseCommands("LFRF")).toEqual([
-            ControlCommand.L,
-            ControlCommand.F,
-            ControlCommand.R,
-            ControlCommand.F
+                ControlCommand.L,
+                ControlCommand.F,
+                ControlCommand.R,
+                ControlCommand.F
             ]
         )
     });
@@ -53,34 +53,35 @@ describe('parseCoordinates', () => {
     });
     it('should correctly parse coordinates', () => {
         expect(parseCoordinates('5 5'))
-            .toEqual(new Position(5,5))
+            .toEqual(new Position(5, 5))
     });
 });
 
 describe('parseCoordinatesWithOrientation', () => {
+    let origin = new Position(0, 0)
     it('should throw an error if value is null', () => {
-        expect(() => parseCoordinatesWithDirection(null))
+        expect(() => parseCoordinatesWithDirection(null, origin))
             .toThrowError(`Incorrect value was provided: null`)
     });
     it('should throw an error if value is undefined', () => {
-        expect(() => parseCoordinatesWithDirection(undefined))
+        expect(() => parseCoordinatesWithDirection(undefined, origin))
             .toThrowError(`Incorrect value was provided: undefined`)
     });
 
     it('should throw an error if value is empty', () => {
-        expect(() => parseCoordinatesWithDirection(""))
+        expect(() => parseCoordinatesWithDirection("", origin))
             .toThrowError(`Incorrect value was provided: `)
     });
     it('should throw an error if value does not contains three elements separated by a space', () => {
-        expect(() => parseCoordinatesWithDirection("5 5"))
+        expect(() => parseCoordinatesWithDirection("5 5", origin))
             .toThrowError(`Incorrect value was provided: 5 5`)
     });
     it('should throw an error if value does not valid coordinates', () => {
-        expect(() => parseCoordinatesWithDirection("5 A N"))
+        expect(() => parseCoordinatesWithDirection("5 A N", origin))
             .toThrowError(`Incorrect value was provided: 5 A N`)
     });
     it('should throw an error if value does not valid direction', () => {
-        expect(() => parseCoordinatesWithDirection("5 5 A"))
+        expect(() => parseCoordinatesWithDirection("5 5 A", origin))
             .toThrowError(`Incorrect value was provided: 5 5 A`)
     });
     it.each`
@@ -91,7 +92,12 @@ describe('parseCoordinatesWithOrientation', () => {
         ${Direction.W}
     `
     ('should correctly parse coordinates with direction', ({direction}) => {
-        expect(parseCoordinatesWithDirection(`1 8 ${Direction[direction]}`))
-            .toEqual(new PositionWithOrientation(new Position(1,8), direction))
+        expect(parseCoordinatesWithDirection(`1 8 ${Direction[direction]}`, origin))
+            .toEqual(new PositionWithOrientation(new Position(1, 8), direction))
+    });
+    it('should correctly translate parsed position', () => {
+        origin = new Position(2,3)
+        expect(parseCoordinatesWithDirection(`0 0 N`, origin))
+            .toEqual(new PositionWithOrientation(new Position(2, 3), Direction.N))
     });
 });

@@ -19,7 +19,7 @@ export const parseCommands =
                     controlCommands.push(ControlCommand.R)
                     break;
                 default:
-                    throw new Error(`Unknown command "${commands.charAt(i)}" at position ${i+1}`)
+                    throw new Error(`Unknown command "${commands.charAt(i)}" at position ${i + 1}`)
             }
         }
         return controlCommands
@@ -60,7 +60,11 @@ const parseOrientation = (value: string): Direction => {
     }
 }
 
-export const parseCoordinatesWithDirection = (value: string): PositionWithOrientation => {
+export const translatePosition = (position: Position, origin: Position) => {
+    return new Position(position.x + origin.x, position.y + origin.y)
+}
+
+export const parseCoordinatesWithDirection = (value: string, origin: Position): PositionWithOrientation => {
     if (!value) {
         throw new Error(`Incorrect value was provided: ${value}`)
     }
@@ -70,8 +74,9 @@ export const parseCoordinatesWithDirection = (value: string): PositionWithOrient
     }
     try {
         const position = parseCoordinates(`${values[0]} ${values[1]}`)
+        const translatedPosition = translatePosition(position, origin)
         const direction = parseOrientation(values[2])
-        return new PositionWithOrientation(position, direction)
+        return new PositionWithOrientation(translatedPosition, direction)
     } catch (e) {
         throw new Error(`Incorrect value was provided: ${value}`)
     }
