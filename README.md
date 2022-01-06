@@ -53,9 +53,9 @@ We will use an OOD for the solution. From the description we see there two main 
 
 We will need to implement a parser for the input file. The position of the mower is relative to the lawn lower left position, but it could be better to use a commun origin for all the positions. So we need to translate the mow position. Let's say the origin is the same one as for the lawn which facilitate the translation as the lawn.
 
-From the description we see that there are more than one mows. So we will implement a controller that coordinates all the mows.
+From the description we see that there are more than one mower. So we will implement a controller that coordinates all the mowers.
 
-For the output we can just instantiate a mower and make it process the commands and at the end aks it for it position. As we are using NodeJS, let's make use of events. Processing commands could be an async task and the mower emits different events. We can then implement a listener that listen for those events to do some logic.
+For the output we can just instantiate a mower and make it process the commands and at the end, asks it for its position. As we are using NodeJS, let's make use of events. Processing commands could be an async task and the mower emits different events. We can then implement a listener that listen for those events to do some logic.
 
 # How to run
 Before running the program you should first run `npm install` at the root directory.
